@@ -2,10 +2,6 @@
 	path = src/scout_ros2
 	url = https://github.com/ori-systems/scout_ros2.git
 	branch = humble
-[submodule "src/ugv_sdk"]
-	path = src/ugv_sdk
-	url = https://github.com/agilexrobotics/ugv_sdk.git
-	branch = main
 [submodule "src/velodyne"]
 	path = src/velodyne
 	url = https://github.com/ros-drivers/velodyne.git

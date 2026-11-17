@@ -1,0 +1,19 @@
+[Unit]
+Description=Scout CAN heartbeat monitoring and recovery
+Wants=docker.service
+After=docker.service systemd-networkd.service
+
+[Service]
+Type=simple
+Environment=CAN_INTERFACE=can0
+Environment=CONTAINER_NAME=scout_mini_base
+Environment=CAN_TIMEOUT=5
+Environment=STARTUP_GRACE=20
+Environment=USB_POWER_CYCLE=1
+ExecStart=/usr/bin/python3 -u /usr/local/lib/scout-mini/can-watchdog.py
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target

@@ -11,4 +11,9 @@
       enabled: false,
     },
   },
+  transport: {
+    shared_memory: {
+      enabled: false,
+    },
+  },
 }

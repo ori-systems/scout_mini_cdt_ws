@@ -1,0 +1,5 @@
+/camera/d455:
+  ros__parameters:
+    # Jazzy's image_transport plugin prefixes namespaced topic parameters with a dot.
+    # Pass this in a parameter file: ROS command-line overrides reject the leading dot.
+    .d455.color.image_raw.compressed.jpeg_quality: 70

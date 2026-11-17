@@ -1,0 +1,5 @@
+# Preserve upstream documentation bytes when the SDK is tracked by this repo.
+*.pdf binary
+*.docx binary
+*.xlsx binary
+*.png binary

@@ -4,19 +4,34 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile
       args:
-        - USERNAME=${USERNAME}
-        - USER_UID=${UID}
-        - ROS_DISTRO=${ROS_DISTRO}
-        - WORKSPACE=${WORKSPACE}
+        USERNAME: ${CONTAINER_USERNAME:-ori}
+        USER_UID: ${CONTAINER_UID:-1000}
+        ROS_DISTRO: ${ROS_DISTRO:-jazzy}
+        WORKSPACE: ${WORKSPACE:-/home/ori/cdt_ws}
     image: scout_mini_base:latest
     container_name: scout_mini_base
     network_mode: host
+    working_dir: ${WORKSPACE:-/home/ori/cdt_ws}
+    init: true
+    restart: unless-stopped
+    stop_signal: SIGINT
+    stop_grace_period: 20s
     tty: true
+    entrypoint: ["/bin/bash", "${WORKSPACE:-/home/ori/cdt_ws}/docker/entrypoint.sh"]
+    command:
+      - launch
+      - port_name:=${CAN_INTERFACE:-can0}
+      - is_omni_wheel:=${IS_OMNI_WHEEL:-true}
+      - model:=${SCOUT_MODEL:-scout_mini/scout_mini_omni.xacro}
+      - velodyne_ip:=${VELODYNE_IP:-192.168.1.201}
+      - "realsense_serial:=${REALSENSE_SERIAL:-''}"
     environment:
       ROS_DOMAIN_ID: 0
       RMW_IMPLEMENTATION: rmw_zenoh_cpp
-      ZENOH_ROUTER_CONFIG_URI: /home/ori/ros2_ws/docker/router.json5
-      ZENOH_SESSION_CONFIG_URI: /home/ori/ros2_ws/docker/session.json5
+      WORKSPACE: ${WORKSPACE:-/home/ori/cdt_ws}
+      BUILD_JOBS: ${BUILD_JOBS:-2}
+      ZENOH_ROUTER_CONFIG_URI: ${WORKSPACE:-/home/ori/cdt_ws}/docker/router.json5
+      ZENOH_SESSION_CONFIG_URI: ${WORKSPACE:-/home/ori/cdt_ws}/docker/session.json5
     group_add:
       - video
       - plugdev
@@ -24,7 +39,6 @@ services:
       - 'c 81:* rmw'
       - 'c 189:* rmw'
     volumes:
-    - ./..:${WORKSPACE}
+    - ./..:${WORKSPACE:-/home/ori/cdt_ws}
     - /dev/:/dev/
-    # command: bash -c "source install/setup.bash 
-    #         && ros2 launch apriltag_pose_estimator detector.launch.py camera_id:=camera3"
+    - /run/udev:/run/udev:ro
