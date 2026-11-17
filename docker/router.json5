@@ -1,0 +1,14 @@
+{
+  mode: "router",
+  listen: {
+    endpoints: ["tcp/[::]:7448"],
+  },
+  connect: {
+    endpoints: [],
+  },
+  scouting: {
+    multicast: {
+      enabled: false,
+    },
+  },
+}

@@ -1,0 +1,4 @@
+[submodule "src/scout_ros2"]
+	path = src/scout_ros2
+	url = https://github.com/ori-systems/scout_ros2.git
+	branch = humble

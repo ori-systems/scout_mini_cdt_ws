@@ -1,0 +1,30 @@
+services:
+  scout_mini_base:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      args:
+        - USERNAME=${USERNAME}
+        - USER_UID=${UID}
+        - ROS_DISTRO=${ROS_DISTRO}
+        - WORKSPACE=${WORKSPACE}
+    image: scout_mini_base:latest
+    container_name: scout_mini_base
+    network_mode: host
+    tty: true
+    environment:
+      ROS_DOMAIN_ID: 0
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp
+      ZENOH_ROUTER_CONFIG_URI: /home/ori/ros2_ws/docker/router.json5
+      ZENOH_SESSION_CONFIG_URI: /home/ori/ros2_ws/docker/session.json5
+    group_add:
+      - video
+      - plugdev
+    device_cgroup_rules:
+      - 'c 81:* rmw'
+      - 'c 189:* rmw'
+    volumes:
+    - ./..:${WORKSPACE}
+    - /dev/:/dev/
+    # command: bash -c "source install/setup.bash 
+    #         && ros2 launch apriltag_pose_estimator detector.launch.py camera_id:=camera3"
