@@ -6,6 +6,11 @@ The Scout base driver, messages and robot descriptions are provided by the
 `src/scout_ros2` Git submodule from
 [ori-systems/scout_ros2](https://github.com/ori-systems/scout_ros2)
 
+The workspace also includes the
+[AgileX UGV SDK](https://github.com/agilexrobotics/ugv_sdk) at `src/ugv_sdk`
+and the [Velodyne drivers](https://github.com/ros-drivers/velodyne) at
+`src/velodyne` as submodules. All dependencies are pinned to specific commits.
+
 ## Clone the workspace
 
 ```bash
@@ -13,10 +18,10 @@ git clone --recurse-submodules https://github.com/ori-systems/scout_mini_cdt_ws.
 cd scout_mini_cdt_ws
 ```
 
-For an existing clone, initialise the Scout submodule with:
+For an existing clone, initialise all submodules with:
 
 ```bash
-git submodule update --init --recursive -- src/scout_ros2
+git submodule update --init --recursive
 ```
 
 ## Update the Scout dependency
