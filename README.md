@@ -75,12 +75,84 @@ docker compose --env-file docker/.env -f docker/docker-compose.yml logs -f
 docker compose --env-file docker/.env -f docker/docker-compose.yml down
 ```
 
+## Receive topics on a Linux PC
+
+Run the commands in this section on the client PC. The Scout's Docker stack
+must already be running on the Pi.
+
+### Connect to the Scout network
+
+Connect the PC's Wi-Fi adapter to:
+
+| Setting | Value |
+| --- | --- |
+| Wi-Fi network (SSID) | `Scout-Mini-1` |
+| Default Wi-Fi password | `password` |
+| Router address | `192.168.1.1` |
+| Pi address | `192.168.1.2` |
+| Pi Zenoh endpoint | `tcp/192.168.1.2:7448` |
+| Foxglove WebSocket | `ws://192.168.1.2:8765` |
+
+A second Wi-Fi adapter or another connection can provide internet access while the Scout Wi-Fi is connected.
+
+Check that the Pi is reachable:
+
+```bash
+ping -c 3 192.168.1.2
+```
+
+### Install ROS and Zenoh
+
+Use Ubuntu 24.04 with ROS 2 Jazzy to match the Pi. First follow the
+[ROS 2 Jazzy Ubuntu installation instructions](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html)
+to configure the ROS apt repository and install ROS. Then install the Zenoh
+middleware:
+
+```bash
+sudo apt update
+sudo apt install ros-jazzy-rmw-zenoh-cpp
+```
+
+The Zenoh router already runs on the Pi. Each ROS node on the PC connects
+directly to it in client mode; no Zenoh router is needed on the PC.
+This Scout uses TCP port **7448**, rather than Zenoh's default port 7447.
+
+### Configure the client terminal
+
+Create a reusable connection file:
+
+```bash
+cat > ~/scout-connect.bash <<'EOF'
+source /opt/ros/jazzy/setup.bash
+unset ZENOH_SESSION_CONFIG_URI ZENOH_ROUTER_CONFIG_URI
+export ROS_DOMAIN_ID=0
+export RMW_IMPLEMENTATION=rmw_zenoh_cpp
+export ZENOH_CONFIG_OVERRIDE='mode="client";connect/endpoints=["tcp/192.168.1.2:7448"];transport/shared_memory/enabled=false'
+EOF
+```
+
+Load it in every terminal used for ROS commands or applications. Stop any
+ROS CLI daemon previously started with a different middleware configuration:
+
+```bash
+source ~/scout-connect.bash
+ros2 daemon stop
+ros2 topic list --no-daemon
+ros2 topic echo /scout_mini/odom --once
+ros2 topic hz /velodyne_points
+```
+
+The Pi supplies the sensor drivers and TF tree. Standard topics such as
+odometry, images, point clouds and TF do not require building this workspace
+on the PC.
+
 ## Foxglove
 
 Connect the PC to the Scout LAN/Wi-Fi, open Foxglove, choose a Foxglove
 WebSocket connection and enter `ws://192.168.1.2:8765`.
 
 Useful topics:
+
 | Topic | Display |
 | --- | --- |
 | `/scout_mini/odom` | Odometry / raw messages |
@@ -88,6 +160,7 @@ Useful topics:
 | `/velodyne_points` | Full point cloud at the sensor rate, fixed frame `velodyne` |
 | `/camera/d455/color/image_raw/compressed` | JPEG colour image for Wi-Fi / Foxglove, quality 70 |
 | `/camera/d455/color/image_raw` | Full colour image, preferably viewed over Ethernet |
+| `/camera/d455/depth/image_rect_raw/compressed` | Lossless 16-bit PNG depth image |
 | `/camera/d455/depth/image_rect_raw` | Depth image |
 
 The bridge serves the robot model's `package://` mesh resources. Velodyne
