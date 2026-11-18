@@ -3,3 +3,5 @@
     # Jazzy's image_transport plugin prefixes namespaced topic parameters with a dot.
     # Pass this in a parameter file: ROS command-line overrides reject the leading dot.
     .d455.color.image_raw.compressed.jpeg_quality: 70
+    # Depth is 16-bit; PNG preserves the measurements and is supported by Foxglove.
+    .d455.depth.image_rect_raw.compressed.format: png

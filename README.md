@@ -134,3 +134,9 @@ sudo systemctl start scout-can-watchdog.service
 
 This recovers communication failures; persistent CAN wiring, termination,
 power, or adapter firmware faults still need fixing.
+
+
+## Scout and CDT payload description
+
+The default boot stack loads a single combined Scout Mini Omni and CDT
+payload model from `src/payload_urdf`. `scout_bringup` accepts `payload:=false` to select the base model alone.

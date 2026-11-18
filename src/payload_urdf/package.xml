@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>payload_urdf</name>
+  <version>0.1.0</version>
+  <description>Standalone CAD-aligned Scout CDT payload geometry and nominal sensor frames.</description>
+  <maintainer email="ori@todo.todo">Oxford Robotics Institute</maintainer>
+  <license>BSD</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>scout_description</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

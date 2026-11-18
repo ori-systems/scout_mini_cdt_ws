@@ -13,6 +13,7 @@
   <exec_depend>foxglove_bridge</exec_depend>
   <exec_depend>scout_base</exec_depend>
   <exec_depend>scout_description</exec_depend>
+  <exec_depend>payload_urdf</exec_depend>
   <exec_depend>ament_index_python</exec_depend>
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>

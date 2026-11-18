@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <!-- Attach to a parent which already exists. This macro never defines base_link.
+       Geometry is in metres. Sensor mount poses use the existing Scout ROS datum. -->
+  <xacro:macro name="cdt_payload"
+               params="parent:=base_link camera_name:=d455 lidar_frame:=velodyne imu_frame:=d455_imu_optical_frame nominal_camera_frames:=false">
+    <link name="cdt_sensor_mount">
+      <visual name="sensor_mount">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry><mesh filename="package://payload_urdf/meshes/sensor_mount.stl"/></geometry>
+        <material name="cdt_mount_grey"><color rgba="0.70 0.73 0.76 1"/></material>
+      </visual>
+      <collision name="sensor_mount">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry><mesh filename="package://payload_urdf/meshes/sensor_mount.stl"/></geometry>
+      </collision>
+    </link>
+    <joint name="base_to_cdt_sensor_mount" type="fixed">
+      <parent link="${parent}"/>
+      <child link="cdt_sensor_mount"/>
+      <origin xyz="0.190000 0 0.068999169119" rpy="0 0 0"/>
+    </joint>
+
+    <!-- ROS driver convention: X forward, Y left, Z up. Native Velodyne
+         axes were converted when the corrected mesh was generated. -->
+    <link name="${lidar_frame}">
+      <visual name="vlp16">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry><mesh filename="package://payload_urdf/meshes/vlp16.stl"/></geometry>
+        <material name="cdt_lidar_grey"><color rgba="0.45 0.50 0.58 1"/></material>
+      </visual>
+      <collision name="vlp16">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry><mesh filename="package://payload_urdf/meshes/vlp16.stl"/></geometry>
+      </collision>
+    </link>
+    <joint name="base_to_${lidar_frame}" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${lidar_frame}"/>
+      <origin xyz="0.190000 0 0.111718169119" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Camera mount at left IR/depth datum, body axes forward/left/up.
+         The live RealSense driver owns calibrated internal sensor transforms. -->
+    <link name="${camera_name}_link">
+      <visual name="d455_housing">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry><mesh filename="package://payload_urdf/meshes/d455.stl"/></geometry>
+        <material name="cdt_camera_grey"><color rgba="0.35 0.37 0.40 1"/></material>
+      </visual>
+      <collision name="d455_housing">
+        <origin xyz="-0.008350 -0.047500 0" rpy="0 0 0"/>
+        <geometry><box size="0.026 0.124 0.029"/></geometry>
+      </collision>
+    </link>
+    <joint name="base_to_${camera_name}" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${camera_name}_link"/>
+      <origin xyz="0.281350 0.047500 0.063499169119" rpy="0 0 0"/>
+    </joint>
+
+    <!-- For standalone/offline previews only. Omit these while the camera driver
+         is publishing calibrated TFs, to avoid competing transform publishers. -->
+    <xacro:if value="${nominal_camera_frames}">
+      <link name="${camera_name}_depth_optical_frame"/>
+      <joint name="base_to_${camera_name}_depth_optical" type="fixed">
+        <parent link="${parent}"/>
+        <child link="${camera_name}_depth_optical_frame"/>
+        <origin xyz="0.281350 0.047500 0.063499169119"
+                rpy="-1.5707963267948966 0 -1.5707963267948966"/>
+      </joint>
+      <link name="${camera_name}_color_optical_frame"/>
+      <joint name="base_to_${camera_name}_color_optical" type="fixed">
+        <parent link="${parent}"/>
+        <child link="${camera_name}_color_optical_frame"/>
+        <origin xyz="0.281350 -0.011500 0.063499169119"
+                rpy="-1.5707963267948966 0 -1.5707963267948966"/>
+      </joint>
+    </xacro:if>
+
+    <!-- Mechanical IMU datum, not a calibrated IMU-data TF. In the combined
+         robot it uses a cdt_ name distinct from any future driver-owned frame. -->
+    <link name="${imu_frame}"/>
+    <joint name="base_to_${imu_frame}" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${imu_frame}"/>
+      <origin xyz="0.265330 0.017280 0.070899169119"
+              rpy="-1.5707963267948966 0 -1.5707963267948966"/>
+    </joint>
+  </xacro:macro>
+</robot>

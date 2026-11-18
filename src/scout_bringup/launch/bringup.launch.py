@@ -8,7 +8,7 @@ from launch.launch_description_sources import (
     FrontendLaunchDescriptionSource,
     PythonLaunchDescriptionSource,
 )
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node, PushRosNamespace, SetParametersFromFile
 
 
@@ -36,6 +36,7 @@ def generate_launch_description():
         DeclareLaunchArgument("is_omni_wheel", default_value="true"),
         DeclareLaunchArgument("scout_namespace", default_value="scout_mini"),
         DeclareLaunchArgument("model", default_value="scout_mini/scout_mini_omni.xacro"),
+        DeclareLaunchArgument("payload", default_value="true"),
         DeclareLaunchArgument("velodyne_ip", default_value="192.168.1.201"),
         DeclareLaunchArgument("velodyne_frame", default_value="velodyne"),
         DeclareLaunchArgument("realsense_serial", default_value="''"),
@@ -78,8 +79,17 @@ def generate_launch_description():
     )
 
     scout_description = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(share("scout_description", "launch", "scout_base_description.launch.py")),
-        launch_arguments={"model": LaunchConfiguration("model")}.items(),
+        PythonLaunchDescriptionSource(share("payload_urdf", "launch", "description.launch.py")),
+        launch_arguments={
+            "scout_model": LaunchConfiguration("model"),
+            "payload": LaunchConfiguration("payload"),
+            "lidar_frame": LaunchConfiguration("velodyne_frame"),
+            # Live camera TFs are calibrated by the driver; use nominal frames
+            # only when the camera driver is disabled for an offline preview.
+            "nominal_camera_frames": PythonExpression([
+                "'", LaunchConfiguration("realsense"), "'.lower() in ('false', '0')",
+            ]),
+        }.items(),
         condition=IfCondition(LaunchConfiguration("scout_description")),
     )
 
@@ -97,7 +107,9 @@ def generate_launch_description():
     transform_parameters["calibration"] = share("velodyne_pointcloud", "params", "VLP16db.yaml")
     velodyne_transform = Node(
         package="velodyne_pointcloud", executable="velodyne_transform_node", name="velodyne_transform_node",
-        output="screen", parameters=[transform_parameters],
+        output="screen", parameters=[transform_parameters, {
+            "frame_id": LaunchConfiguration("velodyne_frame"),
+        }],
         condition=IfCondition(LaunchConfiguration("velodyne")),
     )
 

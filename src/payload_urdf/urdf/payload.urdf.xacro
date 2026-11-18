@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- Standalone payload preview. The combined robot defines its root in Scout. -->
+<robot name="scout_cdt_payload" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="payload.xacro"/>
+  <link name="base_link"/>
+  <xacro:cdt_payload parent="base_link" nominal_camera_frames="true"/>
+</robot>
