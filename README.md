@@ -7,9 +7,7 @@ The Scout base driver, messages and robot descriptions are provided by the
 [ori-systems/scout_ros2](https://github.com/ori-systems/scout_ros2)
 
 The [AgileX UGV SDK](https://github.com/agilexrobotics/ugv_sdk) at `src/ugv_sdk`
-is included directly in this repository, with the CAN lifecycle fixes and its
-existing googletest dependency. Its upstream revisions and local modifications
-are recorded in [UPSTREAM.md](src/ugv_sdk/UPSTREAM.md).
+is included directly in this repository.
 
 The [Velodyne drivers](https://github.com/ros-drivers/velodyne) at
 `src/velodyne` remain a submodule, alongside `src/scout_ros2`. Both submodules
