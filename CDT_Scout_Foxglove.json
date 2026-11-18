@@ -1,0 +1,230 @@
+{
+  "configById": {
+    "3D!sb1q5c": {
+      "cameraState": {
+        "perspective": true,
+        "distance": 13.268408625781095,
+        "phi": 59.503759664231524,
+        "thetaOffset": 59.02907712246031,
+        "targetOffset": [
+          1.2670995546064736,
+          0.15758099623240374,
+          1.2342322256579477e-17
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-position",
+      "followTf": "base_link",
+      "fixedFrame": "odom",
+      "scene": {
+        "labelScaleFactor": 0,
+        "meshUpAxis": "z_up",
+        "enableStats": false,
+        "transforms": {
+          "visible": false
+        }
+      },
+      "transforms": {},
+      "topics": {
+        "/velodyne_points": {
+          "visible": false,
+          "colorField": "intensity",
+          "colorMode": "colormap",
+          "colorMap": "turbo",
+          "stixelsEnabled": false,
+          "decayTime": 0
+        },
+        "/velodyne_packets": {
+          "visible": true,
+          "colorField": "intensity",
+          "colorMode": "colormap",
+          "colorMap": "turbo",
+          "stixelsEnabled": false,
+          "pointShape": "circle",
+          "explicitAlpha": 1,
+          "decayTime": 0,
+          "pointSize": 1.5
+        },
+        "/scout_mini/preview/points": {
+          "visible": false,
+          "colorField": "intensity",
+          "colorMode": "colormap",
+          "colorMap": "turbo",
+          "stixelsEnabled": false
+        },
+        "/initialpose": {
+          "visible": false
+        },
+        "/scout_mini/preview/color/compressed": {
+          "visible": false
+        },
+        "/robot_description": {
+          "visible": true
+        },
+        "/camera/d455/depth/image_rect_raw/compressed": {
+          "visible": true,
+          "cameraInfoTopic": "/camera/d455/depth/camera_info",
+          "projectionFrameId": "base_link",
+          "renderMode": "pointCloud",
+          "siblingRgbTopic": "/camera/d455/color/image_raw/compressed"
+        },
+        "/camera/d455/depth/image_rect_raw": {
+          "visible": false,
+          "frameLocked": true,
+          "cameraInfoTopic": "/camera/d455/depth/camera_info",
+          "distance": 1,
+          "planarProjectionFactor": 0,
+          "renderMode": "pointCloud",
+          "projectionFrameId": "base_link",
+          "color": "#ffffff",
+          "rectifyImage": true,
+          "pointSize": 1,
+          "siblingRgbTopic": "/camera/d455/color/image_raw/compressed",
+          "syncModeEnabled": false,
+          "colorMap": "turbo",
+          "colorMode": "colormap"
+        },
+        "/camera/d455/color/image_raw/compressed": {
+          "visible": false,
+          "cameraInfoTopic": "/camera/d455/color/camera_info",
+          "projectionFrameId": "base_link",
+          "distance": 1,
+          "renderMode": "default"
+        }
+      },
+      "layers": {
+        "grid": {
+          "visible": true,
+          "drawBehind": false,
+          "instanceId": "d53731bf-2e48-4b3b-9593-36ec67a463ab",
+          "layerId": "foxglove.Grid",
+          "size": 10,
+          "divisions": 10,
+          "lineWidth": 1,
+          "color": "#248eff",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "synchronize": false,
+      "imageMode": {}
+    },
+    "Image!3mnp456": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": 60,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "synchronize": false,
+      "imageMode": {
+        "imageTopic": "/camera/d455/color/image_raw/compressed",
+        "calibrationTopic": "/camera/d455/color/camera_info"
+      }
+    },
+    "Teleop!1dboeq9": {
+      "topic": "/scout_mini/cmd_vel",
+      "publishRate": 50,
+      "autoSendStopOnRelease": true,
+      "upButton": {
+        "field": "linear-x",
+        "value": 1
+      },
+      "downButton": {
+        "field": "linear-x",
+        "value": -1
+      },
+      "leftButton": {
+        "field": "angular-z",
+        "value": 1
+      },
+      "rightButton": {
+        "field": "angular-z",
+        "value": -1
+      },
+      "stopButton": {
+        "field": "linear-x",
+        "value": 0
+      }
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "direction": "row",
+    "first": "3D!sb1q5c",
+    "second": {
+      "first": "Image!3mnp456",
+      "second": "Teleop!1dboeq9",
+      "direction": "column",
+      "splitPercentage": 37.424058323207774
+    },
+    "splitPercentage": 80.5411030176899
+  }
+}
